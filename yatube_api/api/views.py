@@ -51,8 +51,7 @@ class PostViewSet(viewsets.ModelViewSet):
         elif request.method in ['PUT', 'PATCH']:
             if comment.author != request.user:
                 str = 'Редактирование чужого комментария запрещено!'
-                perm = PermissionDenied(str)
-                raise perm
+                raise PermissionDenied(str)
             serializer = CommentSerializer(comment, data=request.data,
                                            partial=(request.method == 'PATCH'))
             if serializer.is_valid():
