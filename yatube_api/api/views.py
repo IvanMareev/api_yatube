@@ -21,6 +21,11 @@ class PostViewSet(viewsets.ModelViewSet):
             raise PermissionDenied('Изменение чужого контента запрещено!')
         super(PostViewSet, self).perform_update(serializer)
 
+    def perform_destroy(self, instance):
+        if instance.author != self.request.user:
+            raise PermissionDenied('Удаление чужого контента запрещено!')
+        instance.delete()  
+
     @action(detail=True, methods=['get', 'post'], url_path='comments')
     def comments(self, request, pk=None):
         post = get_object_or_404(Post, pk=pk)
